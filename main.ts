@@ -1,6 +1,6 @@
 var Jimp = require('jimp');
 
-let inputText = `your mom's gay lmao`;
+let inputText = "Alto Client".toLowerCase();
 const scaleFactor = 8;
 
 //map coordinates to characters
@@ -36,45 +36,35 @@ let charWidth = {
     '_': 6
 }
 
-
-//calculate image width
-let imageWidth = inputText.length - 1;
-for (let char of inputText) {
-    imageWidth += charWidth[char];
-}
-
 // helper function -> get and return the crop coordinates for given char
 let getCharCoordinates = (char) => {
-    let x = 2 + charCoords[char][0] * 9;
-    let y = 2 + charCoords[char][1] * 9;
-    console.log(`Char Coord Y is ${charCoords[char][1]}`)
-    let cry = Number(y + 8);
-    let crx = Number(x + charWidth[char])
-    let numbers = [x, y, crx, cry];
-    return numbers;
+    return {
+        'x': 2 + charCoords[char][0] * 9,
+        'y': 2 + charCoords[char][1] * 9,
+        'dx': (2 + charCoords[char][0] * 9) + 8,
+        'dy': (2 + charCoords[char][1] * 9) + charWidth[char]
+    };
 }
 
 //draws the text from a string input
 async function writeText(input) {
-    input = input.toLowerCase();
-
+    
+    //calculate image width
+    let imageWidth = inputText.length - 1;
+    for (let char of inputText) { imageWidth += charWidth[char]; }
+    
     //create image using image width
-    let outputImage = new Jimp(imageWidth, 8, 'output', (err, image) => {
-        if (err) throw err
-    });
+    let outputImage = new Jimp(imageWidth, 8, 'output', (err, image) => { if (err) throw err });
     
     const source = await Jimp.read('./arcadia font.png')
     let cursor = 0; //creates a cursor position that will be used to draw characters
-
-    for (let i = 0; i < input.length; i++) {
-        let char = input[i];
-        console.log(char);
+    
+    for (let char of input) {
         let cropCoords = getCharCoordinates(char);
-        console.log(cropCoords);
-        outputImage.blit(source, cursor, 0, cropCoords[0], cropCoords[1], cropCoords[2], cropCoords[3] );
+        outputImage.blit(source, cursor, 0, cropCoords.x, cropCoords.y, cropCoords.dx, cropCoords.dy );
         cursor = cursor + 1 + charWidth[char];
     }
-
+    
     outputImage.scale(scaleFactor, Jimp.RESIZE_NEAREST_NEIGHBOR);
     outputImage.write('./output.png')
     

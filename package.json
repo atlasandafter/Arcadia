@@ -1,7 +1,7 @@
 {
   "name": "arcadia-font",
   "version": "1.0.0",
-  "description": "",
+  "description": "\"# Arcadia\"",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -13,6 +13,13 @@
   },
   "dependencies": {
     "jimp": "^0.16.1"
-  }
-
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/atlasandafter/Arcadia.git"
+  },
+  "bugs": {
+    "url": "https://github.com/atlasandafter/Arcadia/issues"
+  },
+  "homepage": "https://github.com/atlasandafter/Arcadia#readme"
 }
